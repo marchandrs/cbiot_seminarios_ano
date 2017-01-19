@@ -1,7 +1,7 @@
 require "nokogiri"
 require "open-uri"
 require "openssl"
-require "byebug"
+#require "byebug"
 
 def is_seminario_centro(node)
   if node.at_css("p.seminario-lista-categoria").content == "Seminário do CBiot"
@@ -28,11 +28,19 @@ def get_palestra(node)
 end
 
 def get_palestrante(node)
-  node.css("div.seminario-lista-conteudo p")[2].content
+  if node.css("div.seminario-lista-conteudo p").length > 2
+    node.css("div.seminario-lista-conteudo p")[2].content
+  else
+    ""
+  end
 end
 
 def get_origem(node)
-  node.css("div.seminario-lista-conteudo p")[3].content
+  if node.css("div.seminario-lista-conteudo p").length > 3
+    node.css("div.seminario-lista-conteudo p")[3].content
+  else
+    ""
+  end
 end
 
 search = true
@@ -70,7 +78,6 @@ while search do
   end
 
   page = page + 1
-  search = false if page > 2
 end
 
 File.open(filename, "a") do |file|
